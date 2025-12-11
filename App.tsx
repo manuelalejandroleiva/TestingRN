@@ -4,7 +4,13 @@ import { openDatabaseSync } from 'expo-sqlite';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import migrations from './drizzle/migrations';
+import { Provider } from 'react-redux';
+import { store } from './src/store/store';
+import { ToastProvider } from 'react-native-toast-notifications';
 
+import { navigationRef } from './RootNavigation';
+import Routes from './src/routes/Route';
+import { NavigationContainer } from "@react-navigation/native";
 
 
 export const databasename = 'dblocal'
@@ -16,10 +22,16 @@ export default function App() {
 
 
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Provider store={store}>
+    <StatusBar style="auto" />
+    <ToastProvider>
+      <NavigationContainer ref={navigationRef}>
+        <Routes />
+        
+      </NavigationContainer>
+    </ToastProvider>
+    
+  </Provider>
   );
 }
 
