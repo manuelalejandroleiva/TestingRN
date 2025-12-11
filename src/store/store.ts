@@ -1,11 +1,11 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 
-
+import RouteSlice from "./Route.store";
 
 
 export const store = configureStore({
     reducer: {
-      
+        RouteSlice
      
     },
     

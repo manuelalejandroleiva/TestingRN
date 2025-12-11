@@ -192,7 +192,7 @@ const TextInput = (
         containerStyle={tw`w-full px-0 h-auto  `}
         errorStyle={tw`m-0 p-0`}
         inputContainerStyle={[
-          (props.type !== 'user' && props.type !== 'email') ? tw.style(
+          (props.type !== 'user' ) ? tw.style(
             "w-full",
             // "h-input",
             "border",
