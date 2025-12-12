@@ -285,7 +285,7 @@ export const CustomDropdown = (
 
               "border",
 
-              props.correct ? "-top-9" : "top-[-6]",
+              props.correct ? "-top-9" : "top-[-4]",
             ])} 
           >
             {showInsideContent()}

@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { use, useEffect, useState } from 'react'
 import { useRoute } from '@react-navigation/native'
 import { InfinityScroll } from '@/src/components/InfinityScroll'
@@ -112,7 +112,7 @@ const Monedero = () => {
               Component={MoneyList}
               data={monedero} />
 
-        <Modals heigt='90' stateappear={visibility}  >
+        <Modals heigt={Platform.OS=='ios'?`90`:`150`} stateappear={visibility}  >
           <View style={tw`flex-1 w-full justify-between pt-4`}>
             <View style={tw`flex flex-row w-full justify-around  `}>
 
