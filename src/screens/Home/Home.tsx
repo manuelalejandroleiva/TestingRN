@@ -1,6 +1,6 @@
 
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { use, useCallback, useEffect, useState } from 'react'
+import React, { use, useCallback, useEffect, useMemo, useState } from 'react'
 import { InfinityScroll } from '@/src/components/InfinityScroll'
 import Cards from '@/src/components/Cards/Cards'
 import LayoutHeader from '@/src/Layout/LayoutHeader'
@@ -16,27 +16,45 @@ import TextInput from '@/src/components/TextInput/TextInput'
 import { CustomButton as Button } from '../../components/Button/Button'
 import { CustomDropdown as Dropdown, DropDownItem } from '@/src/components/DropDown/Dropdown'
 import Cross from '@/src/Icons/Cross'
+import { useAppSelector } from '@/src/store/hooks /hooks'
+import { RootState } from '@/src/store/store'
 
 
 
 const Home = () => {
 
-    const {listAccounts,addbankAccount,deletebankAccount,load,visibleAccount}=useUSer()
+    const {listAccounts,addbankAccount,deletebankAccount,load,visibleAccount,filtrarFecha}=useUSer()
+     const {instance} = useAppSelector((state: RootState) => state.InstanceSlice);
+     
+    
     const [visibility,setVisibility]=useState<boolean>(false)
+    
     const [dataDropDown,setDataDropDown]=useState([
         {label:'Insumos',value:'insumos'},
         {label:'Inversiones',value:'Inversiones'},
         {label:'Gastos',value:'Gastos'},
     ])
-    const dataToShow = visibleAccount.length > 0 
-    ? visibleAccount 
-    : listAccounts;
+
+    const [moneda,setMoneda]=useState([
+        {label:'BSD',value:'bsd'},
+        {label:'USD',value:'usd'},
+        {label:'CAD',value:'cad'},
+
+    ])
+
+    const dataToShow = useMemo(() => {
+        return visibleAccount.length > 0 ? visibleAccount : listAccounts;
+      }, [visibleAccount, listAccounts]);
+
+    
   
     const [dateValue, setDateValue] = useState(new Date().toISOString());
+    
     const data={
         fecha:useFieldControl<string>(dateValue, []),
         nombre: useFieldControl<string>("", []),
         cuenta_type: useFieldControl<string>("", []),
+        moneda:useFieldControl<string>("",[])
     }
     const changeVisibilit=()=>{
         setVisibility(!visibility)
@@ -73,6 +91,7 @@ const Home = () => {
                         <Text style={tw`text-black font-bold`}>Fecha: {formatted}</Text>
                         <Text style={tw`text-black font-bold`}>Nombre: {item.nombre ?? item.name}</Text>
                         <Text style={tw`text-black font-bold`}>Tipo de cuenta: {item.tipo_cuenta ?? item.tipoCuenta}</Text>
+                        <Text style={tw`text-black font-bold`}> Moneda: {item.moneda}</Text>
                     </View>
 
                     {/* Icono Cross al final */}
@@ -187,6 +206,14 @@ const Home = () => {
                                                   return data.cuenta_type.handleInputValue(item.value)
                                               } } />
                                       </View>
+                                      <View style={tw`flex w-full mb-4`}>
+                                          <Dropdown data={moneda}
+                                              widthbottom={350}
+                                              label="Moneda de la Cuenta bancaria"
+                                              onSelect={(item: DropDownItem) => {
+                                                  return data.moneda.handleInputValue(item.value)
+                                              } } />
+                                      </View>
 
 
                                       <Button
@@ -198,6 +225,7 @@ const Home = () => {
                                                   createdAt: new Date(dateValue),
                                                   nombre: data.nombre.value,
                                                   tipoCuenta: data.cuenta_type.value,
+                                                  moneda:data.moneda.value.toUpperCase()
                                               })
                                               changeVisibilit()
                                           } } />

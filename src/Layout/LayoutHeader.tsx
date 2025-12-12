@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { ReactNode, useState } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
 import { tw } from '@/lib'
 
@@ -8,6 +8,8 @@ import { colorpallet } from '../components/color/color'
 import RNDateTimePicker from '@react-native-community/datetimepicker'
 import { useUSer } from '../hooks/useUser'
 import { date } from 'drizzle-orm/mysql-core'
+import { useAppDispatch } from '../store/hooks /hooks'
+import { setInstance } from '../store/Instance.store'
 
 
 interface Props {
@@ -22,6 +24,9 @@ interface Props {
 const LayoutHeader = ({ text, children, rightIcon, leftIcon,change=false }: Props) => {
     const [dateValue, setDateValue] = useState(new Date());
     const {filtrarFecha}=useUSer()
+    const dispatch=useAppDispatch()
+    const [state,setState]=useState<number>(0)
+    
   
   return (
     <View style={tw`flex w-full items-center justify-between z-0`}>
@@ -45,13 +50,16 @@ const LayoutHeader = ({ text, children, rightIcon, leftIcon,change=false }: Prop
                 
             }
         }} />
-        <TouchableOpacity
-        onPress={()=>filtrarFecha(dateValue.toISOString())}
+       <TouchableOpacity
+        onPress={() => {
+          filtrarFecha(dateValue.toISOString());
+          dispatch(setInstance({ instance: Date.now() })); // o cualquier valor único
+        }}
         style={tw`bg-blue-500 px-4 py-2 rounded-full shadow-lg`}
-        activeOpacity={0.7} // efecto al presionar
-    >
-      <Text style={tw`text-white font-bold text-base`}>Filtrar</Text>
-    </TouchableOpacity>
+        activeOpacity={0.7}
+>
+  <Text style={tw`text-white font-bold text-base`}>Filtrar</Text>
+</TouchableOpacity>
 
 
       </View>
