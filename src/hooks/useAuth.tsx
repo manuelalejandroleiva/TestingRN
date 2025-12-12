@@ -1,7 +1,7 @@
 import { useSQLiteContext } from "expo-sqlite"
 import { AuthPayload } from "../interfaces /UserInterface";
 import { drizzle } from "drizzle-orm/expo-sqlite"
-import *  as schema from '@/db/schema'
+
 import { navigates } from "@/RootNavigation";
 import { useToast } from "react-native-toast-notifications";
 import { colorpallet } from "../components/color/color";

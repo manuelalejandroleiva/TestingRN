@@ -110,7 +110,7 @@ const Route = () => {
 
             }}
         />
-         <Drawer.Screen
+        <Drawer.Screen
             name="Monedero"
             component={Monedero}
             listeners={{
@@ -118,16 +118,14 @@ const Route = () => {
             }}
             options={{
                 headerShown: false,
-                drawerLabelStyle: {
-                    color: 'white'
+                drawerLabelStyle: { color: 'white' },
+                drawerItemStyle: { 
+                marginVertical: 8,
+                display: 'none',   // 👈 OCULTA DEL DRAWER
                 },
-                drawerItemStyle: { marginVertical: 8 },
-                
-                swipeEnabled: true
-
-
+                swipeEnabled: false,
             }}
-        />
+            />
 
         
     </Drawer.Navigator>

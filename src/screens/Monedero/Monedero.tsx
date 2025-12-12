@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { use, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import { useRoute } from '@react-navigation/native'
 import { InfinityScroll } from '@/src/components/InfinityScroll'
 import LayoutHeader from '@/src/Layout/LayoutHeader'
@@ -22,14 +22,25 @@ const Monedero = () => {
     const params=useRoute()
     const {id}=params.params as {id:string}
     const {handlegoBack}=useGoBack()
-    const {monedero,addMoney}=useCoins(+id)
+    const[cantidad,setCantidad]=useState<number>(0)
+    const {monedero,addMoney,deletebankAccount}=useCoins(+id)
     const [visibility,setVisibility]=useState<boolean>(false)
     const [error,setError]=useState<string>('')
 
+    useEffect(() => {
+    if (monedero && monedero.length > 0) {
+      const total = monedero.reduce((acc, item) => {
+        const cantidadValue = item.cantidad ? item.cantidad.cantidad : item.cantiad?.cantidad ?? 0;
+        return acc + cantidadValue;
+      }, 0);
+      setCantidad(total);
+    } else {
+      setCantidad(0);
+    }
+  }, [monedero]);
+
     const data={
         cantidad: useFieldControl<string>("", [required, isPositive]),
-        
-
     }
     const changeVisibility=()=>{ 
         setVisibility(!visibility)
@@ -54,22 +65,39 @@ const Monedero = () => {
           : "No date";
       
         return (
-          <View style={tw`flex w-full px-4 mb-4 items-center justify-between`}>
-            <Cards type={"Source"} color={colorpallet.orange}>
-              <Text style={tw`text-black font-bold`}>Fecha registro: {formatted}</Text>
-              <Text style={tw`text-black font-bold`}>Fecha cantidad: {fechaCantidad}</Text>
-              <Text style={tw`text-black font-bold`}>Depositado: {cantidadValue} USD</Text>
-            </Cards>
+            <View style={tw`flex w-full px-4 mb-4 items-center justify-between`}>
+            <View style={tw`flex flex-col w-full items-center justify-between`}>
+          
+              <Cards
+                type={"Source"}
+                color={colorpallet.orange}
+                
+              >
+                {/* Botón cerrar arriba a la derecha */}
+                <TouchableOpacity
+                  style={tw`absolute top-2 right-2 z-10`}   
+                    onPress={() => deletebankAccount(item.id)}
+                >
+                  <Cross color="black" />
+                </TouchableOpacity>
+          
+                {/* Contenido centrado */}
+                <View style={tw`w-full items-center justify-center mt-6`}>
+                  <Text style={tw`text-black font-bold`}>Fecha registro: {formatted}</Text>
+                  <Text style={tw`text-black font-bold`}>Fecha cantidad: {fechaCantidad}</Text>
+                  <Text style={tw`text-black font-bold`}>Depositado: {cantidadValue} USD</Text>
+                </View>
+          
+              </Cards>
+          
+            </View>
           </View>
         );
       };
       
-    
   return (
     <><LayoutHeader
-
           text="Monedero de la cuenta"
-
           leftIcon={<TouchableOpacity onPress={handlegoBack} style={tw`flex flex-row items-center justify-between pt-4`}>
           <ArrowBack color='#D9D9D9' 
            />
@@ -84,7 +112,7 @@ const Monedero = () => {
               Component={MoneyList}
               data={monedero} />
 
-<Modals heigt='90' stateappear={visibility}  >
+        <Modals heigt='90' stateappear={visibility}  >
           <View style={tw`flex-1 w-full justify-between pt-4`}>
             <View style={tw`flex flex-row w-full justify-around  `}>
 
@@ -117,9 +145,7 @@ const Monedero = () => {
 
 
                 <View style={tw`flex   w-full  my-4`} >  
-                     
-
-                   
+                                       
                     <View style={tw`flex w-full mb-4`}>     
                     <TextInput
                     label='Ingrese la cantidad a depositar'
@@ -144,10 +170,6 @@ const Monedero = () => {
                       }}/>
                     </View>
                         {error ? <Text style={tw`text-red-500 mb-2`}>{error}</Text> : null}
-                       
-
-                   
-
                      <Button
                           text="Registrar Cantidad"
                           color={colorpallet.primary}
@@ -162,10 +184,7 @@ const Monedero = () => {
                           changeVisibility();
                         }}
                         />
-</View>
-
-
-                
+                </View>
             </View>
             </ScrollView>
                     
@@ -177,6 +196,11 @@ const Monedero = () => {
           </View>
 
         </Modals>
+        <View
+        style={tw`absolute bottom-5  right-5 w-12 h-12 rounded-full bg-orange-500 justify-center items-center shadow-lg`}
+      >
+        <Text style={tw`text-white font-bold text-lg`}>{cantidad}</Text>
+      </View>
         
               </>
           

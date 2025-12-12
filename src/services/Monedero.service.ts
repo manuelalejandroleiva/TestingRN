@@ -25,6 +25,16 @@ class MonederoService {
          throw new Error(error.message)
     }
 }
+
+async deletecantiadadMonedero(id:string|number): Promise<AxiosResponse<any>> {
+    try {
+        const response = await ApiService.api.delete(`/Moneda/${id}`);
+        return response;
+    } catch (error) {
+         //@ts-ignore
+         throw new Error(error.message)
+    }
+}
 }
 const singleton = new MonederoService();
 export default singleton;

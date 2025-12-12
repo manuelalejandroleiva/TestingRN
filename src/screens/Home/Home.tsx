@@ -2,11 +2,6 @@
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { use, useCallback, useEffect, useState } from 'react'
 import { InfinityScroll } from '@/src/components/InfinityScroll'
-import { AuthPayload } from '@/src/interfaces /UserInterface'
-import { useSQLiteContext } from 'expo-sqlite'
-import { drizzle } from 'drizzle-orm/expo-sqlite'
-import *  as schema from '@/db/schema'
-
 import Cards from '@/src/components/Cards/Cards'
 import LayoutHeader from '@/src/Layout/LayoutHeader'
 import { navigates } from '@/RootNavigation'
@@ -15,24 +10,18 @@ import Plus from '@/src/Icons/Plus'
 import { useUSer } from '@/src/hooks/useUser'
 import { colorpallet } from '@/src/components/color/color'
 import { Modals } from '@/src/components/Modal'
-import DateTimePicker from '@react-native-community/datetimepicker'
 import RNDateTimePicker from '@react-native-community/datetimepicker'
 import { useFieldControl } from '@/lib/Forms'
 import TextInput from '@/src/components/TextInput/TextInput'
 import { CustomButton as Button } from '../../components/Button/Button'
 import { CustomDropdown as Dropdown, DropDownItem } from '@/src/components/DropDown/Dropdown'
-import { AccountInterface } from '@/src/interfaces /AccountInterface'
 import Cross from '@/src/Icons/Cross'
-import { useAppDispatch, useAppSelector } from '@/src/store/hooks /hooks';
-import { RootState } from '@/src/store/store';
-import { setBank } from '@/src/store/bankaccount.store'
+
 
 
 const Home = () => {
 
     const {listAccounts,addbankAccount,deletebankAccount,load}=useUSer()
-   
-    
     const [visibility,setVisibility]=useState<boolean>(false)
     const [dataDropDown,setDataDropDown]=useState([
         {label:'Insumos',value:'insumos'},
@@ -66,33 +55,32 @@ const Home = () => {
         item.tipo_cuenta.includes("Gastos")?colorpallet.white:colorpallet.orange;    
       
         return (
-
             <>
           <View style={tw`flex w-full px-4 mb-4`}>
-                        <Cards
-                            type={'Source'}
-                            color={color_cuenta}
-                            route={() => navigates('Monedero', { id: item.id })}
-                        >
-                            {/* Contenedor interno: fila con texto a la izquierda y cruz a la derecha */}
-                            <View style={tw`flex-row w-full items-center justify-between`}>
-                            
-                            {/* Columna de información */}
-                            <View style={tw`flex   flex-col items-center px-8`}>
-                                <Text style={tw`text-black font-bold`}>Fecha: {formatted}</Text>
-                                <Text style={tw`text-black font-bold`}>Nombre: {item.nombre ?? item.name}</Text>
-                                <Text style={tw`text-black font-bold`}>Tipo de cuenta: {item.tipo_cuenta ?? item.tipoCuenta}</Text>
-                            </View>
+                <Cards
+                    type={'Source'}
+                    color={color_cuenta}
+                    route={() => navigates('Monedero', { id: item.id })}
+                >
+                    {/* Contenedor interno: fila con texto a la izquierda y cruz a la derecha */}
+                    <View style={tw`flex-row w-full items-center justify-between`}>
+                    
+                    {/* Columna de información */}
+                    <View style={tw`flex   flex-col items-center px-8`}>
+                        <Text style={tw`text-black font-bold`}>Fecha: {formatted}</Text>
+                        <Text style={tw`text-black font-bold`}>Nombre: {item.nombre ?? item.name}</Text>
+                        <Text style={tw`text-black font-bold`}>Tipo de cuenta: {item.tipo_cuenta ?? item.tipoCuenta}</Text>
+                    </View>
 
-                            {/* Icono Cross al final */}
-                            <TouchableOpacity
-                                onPress={()=>deletebankAccount(item.id)}
-                            >
-                                <Cross color="black" />
-                            </TouchableOpacity>
+                    {/* Icono Cross al final */}
+                    <TouchableOpacity
+                        onPress={()=>deletebankAccount(item.id)}
+                    >
+                        <Cross color="black" />
+                    </TouchableOpacity>
 
-                            </View>
-                        </Cards>
+                    </View>
+                </Cards>
                 </View>
             
             </>
@@ -103,8 +91,6 @@ const Home = () => {
 
    
   return (
-
-
     <><LayoutHeader
           text='Lista de Cuentas Bancarias'
           rightIcon={<TouchableOpacity style={tw`flex items-center justify-end mt-4`} 
@@ -112,8 +98,6 @@ const Home = () => {
               <Plus color='white' />
           </TouchableOpacity>} />
 
-
-          
                     {!load ? (
             <InfinityScroll 
                 style={tw`mt-4`}
