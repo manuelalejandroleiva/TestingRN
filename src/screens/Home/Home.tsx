@@ -25,6 +25,7 @@ const Home = () => {
 
     const {listAccounts,addbankAccount,deletebankAccount,load,visibleAccount,filtrarFecha}=useUSer()
      const {instance} = useAppSelector((state: RootState) => state.InstanceSlice);
+     
     
     const [visibility,setVisibility]=useState<boolean>(false)
     
@@ -32,6 +33,13 @@ const Home = () => {
         {label:'Insumos',value:'insumos'},
         {label:'Inversiones',value:'Inversiones'},
         {label:'Gastos',value:'Gastos'},
+    ])
+
+    const [moneda,setMoneda]=useState([
+        {label:'BSD',value:'bsd'},
+        {label:'USD',value:'usd'},
+        {label:'CAD',value:'cad'},
+
     ])
 
     const dataToShow = useMemo(() => {
@@ -46,6 +54,7 @@ const Home = () => {
         fecha:useFieldControl<string>(dateValue, []),
         nombre: useFieldControl<string>("", []),
         cuenta_type: useFieldControl<string>("", []),
+        moneda:useFieldControl<string>("",[])
     }
     const changeVisibilit=()=>{
         setVisibility(!visibility)
@@ -82,6 +91,7 @@ const Home = () => {
                         <Text style={tw`text-black font-bold`}>Fecha: {formatted}</Text>
                         <Text style={tw`text-black font-bold`}>Nombre: {item.nombre ?? item.name}</Text>
                         <Text style={tw`text-black font-bold`}>Tipo de cuenta: {item.tipo_cuenta ?? item.tipoCuenta}</Text>
+                        <Text style={tw`text-black font-bold`}> Moneda: {item.moneda}</Text>
                     </View>
 
                     {/* Icono Cross al final */}
@@ -196,6 +206,14 @@ const Home = () => {
                                                   return data.cuenta_type.handleInputValue(item.value)
                                               } } />
                                       </View>
+                                      <View style={tw`flex w-full mb-4`}>
+                                          <Dropdown data={moneda}
+                                              widthbottom={350}
+                                              label="Moneda de la Cuenta bancaria"
+                                              onSelect={(item: DropDownItem) => {
+                                                  return data.moneda.handleInputValue(item.value)
+                                              } } />
+                                      </View>
 
 
                                       <Button
@@ -207,6 +225,7 @@ const Home = () => {
                                                   createdAt: new Date(dateValue),
                                                   nombre: data.nombre.value,
                                                   tipoCuenta: data.cuenta_type.value,
+                                                  moneda:data.moneda.value.toUpperCase()
                                               })
                                               changeVisibilit()
                                           } } />
