@@ -21,13 +21,16 @@ import Cross from '@/src/Icons/Cross'
 
 const Home = () => {
 
-    const {listAccounts,addbankAccount,deletebankAccount,load}=useUSer()
+    const {listAccounts,addbankAccount,deletebankAccount,load,visibleAccount}=useUSer()
     const [visibility,setVisibility]=useState<boolean>(false)
     const [dataDropDown,setDataDropDown]=useState([
         {label:'Insumos',value:'insumos'},
         {label:'Inversiones',value:'Inversiones'},
         {label:'Gastos',value:'Gastos'},
     ])
+    const dataToShow = visibleAccount.length > 0 
+    ? visibleAccount 
+    : listAccounts;
   
     const [dateValue, setDateValue] = useState(new Date().toISOString());
     const data={
@@ -102,7 +105,7 @@ const Home = () => {
             <InfinityScroll 
                 style={tw`mt-4`}
                 Component={UserList}
-                data={listAccounts} 
+                data={dataToShow} 
             />
             ) : (
             <View style={tw`flex-1 items-center justify-center`}>

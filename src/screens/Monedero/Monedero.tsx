@@ -197,7 +197,7 @@ const Monedero = () => {
 
         </Modals>
         <View
-        style={tw`absolute bottom-5  right-5 w-12 h-12 rounded-full bg-orange-500 justify-center items-center shadow-lg`}
+        style={tw`absolute bottom-5  right-5 w-50 h-12 rounded-full bg-orange-500 justify-center items-center shadow-lg`}
       >
         <Text style={tw`text-white font-bold text-lg`}>{cantidad}</Text>
       </View>
