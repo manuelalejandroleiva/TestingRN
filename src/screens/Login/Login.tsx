@@ -14,13 +14,13 @@ const Login = () => {
   const [isSecureEntry, setIsSecureEntry] = useState(true);
   const {handleAuth} =useAuth()
   const userData = {
-    email: useFieldControl<string>("eduardos", []),
-    password: useFieldControl<string>("12345678", []),
+    email: useFieldControl<string>("admin", []),
+    password: useFieldControl<string>("admin", []),
     error: useFieldControl<boolean>(false, [])
   };
   return (
-    <SafeAreaView
-  style={[tw`flex-1 items-center justify-center bg-white`]} // flex-1 fills screen
+    <ScrollView
+  contentContainerStyle={[tw`flex-1 items-center justify-center bg-white`]} // flex-1 fills screen
 >
     <View style={[tw`flex items-center justify-center `]}>
           <Image source={require('@/assets/img/logo.jpg')} style={tw`w-[150px] h-[150px]`} />
@@ -60,7 +60,7 @@ const Login = () => {
       onPress={() => handleAuth(userData.email.value, userData.password.value)}
     />
   </View>
-</SafeAreaView>
+</ScrollView>
 
   )
 }

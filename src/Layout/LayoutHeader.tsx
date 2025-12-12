@@ -39,17 +39,7 @@ const LayoutHeader = ({ text, children, rightIcon, leftIcon,change=false }: Prop
       </View>
       <View style={tw`flex flex-row w-full items-center justify-between px-4 pt-4 pb-2`}>
         <Text style={tw`font-bold text-lg `}>Selecciona la fecha:</Text>
-        <RNDateTimePicker
-        value={dateValue}
-        onChange={(event, selectedDate) => {
-            if (selectedDate) {
-                
-                const adjustedDate = new Date(selectedDate);
-                adjustedDate.setDate(selectedDate.getDate());
-                setDateValue(adjustedDate);
-                
-            }
-        }} />
+        
        <TouchableOpacity
         onPress={() => {
           filtrarFecha(dateValue.toISOString());

@@ -1,5 +1,5 @@
 
-import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { use, useCallback, useEffect, useMemo, useState } from 'react'
 import { InfinityScroll } from '@/src/components/InfinityScroll'
 import Cards from '@/src/components/Cards/Cards'
@@ -135,7 +135,7 @@ const Home = () => {
               
               
               
-              <Modals heigt='90' stateappear={visibility}>
+              <Modals heigt='200' stateappear={visibility}>
                       <View style={tw`flex-1 w-full justify-between pt-4`}>
                           <View style={tw`flex flex-row w-full justify-around  `}>
 
@@ -168,22 +168,7 @@ const Home = () => {
 
 
                                   <View style={tw`flex   w-full  my-4`}>
-                                      <View style={tw`flex w-full flex-row items-center justify-between mb-4`}>
-                                          <Text style={tw`font-bold`}>Selecciona la fecha:</Text>
-                                          <View style={tw`ml-4`}>
-                                              <RNDateTimePicker
-                                                  value={new Date(dateValue)}
-                                                  onChange={(event, selectedDate) => {
-                                                      if (selectedDate) {
-                                                          const isoDate = selectedDate.toISOString()
-                                                          setDateValue(isoDate)
-
-                                                      }
-                                                  } } />
-                                          </View>
-
-                                      </View>
-
+                                      
 
 
                                       <View style={tw`flex w-full mb-4`}>
@@ -200,7 +185,7 @@ const Home = () => {
 
                                       <View style={tw`flex w-full mb-4`}>
                                           <Dropdown data={dataDropDown}
-                                              widthbottom={350}
+                                              widthbottom={Platform.OS=='ios'?350:315}
                                               label="Tipo de cuenta"
                                               onSelect={(item: DropDownItem) => {
                                                   return data.cuenta_type.handleInputValue(item.value)
@@ -208,7 +193,7 @@ const Home = () => {
                                       </View>
                                       <View style={tw`flex w-full mb-4`}>
                                           <Dropdown data={moneda}
-                                              widthbottom={350}
+                                              widthbottom={Platform.OS=='ios'?350:315}
                                               label="Moneda de la Cuenta bancaria"
                                               onSelect={(item: DropDownItem) => {
                                                   return data.moneda.handleInputValue(item.value)
@@ -222,7 +207,7 @@ const Home = () => {
                                           style={tw`w-full h-12`}
                                           onPress={() => {
                                               addbankAccount({
-                                                  createdAt: new Date(dateValue),
+                                                  createdAt: new Date(),
                                                   nombre: data.nombre.value,
                                                   tipoCuenta: data.cuenta_type.value,
                                                   moneda:data.moneda.value.toUpperCase()
