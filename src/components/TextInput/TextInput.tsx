@@ -1,4 +1,4 @@
-
+import { tw } from "@/lib";
 import React, { ReactNode, useEffect, useRef, useState } from "react";
 
 import {
@@ -13,7 +13,6 @@ import {
 import { Input, InputProps } from "react-native-elements";
 import { useDeviceContext } from "twrnc";
 import { colorpallet } from "../color/color";
-import { tw } from "@/lib";
 
 
 
@@ -56,7 +55,7 @@ const TextInput = (
   const showError = state.wasActive || props.enableError;
 
   const icon = useRef<any>(null);
-  const inputRef = useRef<HTMLInputElement | undefined>(undefined);
+  const inputRef = useRef<HTMLInputElement | undefined>(null);
 
   const [innerValue, setInnerValue] = useState(props.value);
 
@@ -252,4 +251,3 @@ const TextInput = (
 }
 
 export default TextInput
-

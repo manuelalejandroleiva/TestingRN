@@ -10,19 +10,20 @@ interface Props {
     name?: string,
     type: 'Image' | 'Source',
     children?: ReactNode,
-    route?:string,
-    width?:number,
+    route?:()=>void,
+    color?:string
     height?:number
 
 }
 
-const Cards = ({ image, name, type, children,route,width=150,height=150 }: Props) => {
+const Cards = ({ image, name, type, children,route,height=150,color }: Props) => {
 
     const PostLinks = () => {
-        navigates(route as string)
+        route && route()
     }
     return (
-        <TouchableOpacity style={tw`flex w-[${width}px] h-[${height}px] bg-white rounded-lg  border-black shadow-lg`} onPress={PostLinks}>
+        <TouchableOpacity style={tw`flex w-full h-[${height}px] bg-[${color}] rounded-lg  border-black shadow-lg items-center justify-center`} 
+        onPress={PostLinks}>
             {/* Your content here */}
             {type === 'Image' ? <View style={tw`flex-1 w-[140px] items-center justify-center`}>
                 {image && image}

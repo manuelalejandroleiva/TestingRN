@@ -1,11 +1,13 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 
-
+import RouteSlice from "./Route.store";
+import BanckSlice from "./bankaccount.store";
 
 
 export const store = configureStore({
     reducer: {
-      
+        RouteSlice,
+        BanckSlice
      
     },
     

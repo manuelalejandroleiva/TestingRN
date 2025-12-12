@@ -11,6 +11,7 @@ import { ToastProvider } from 'react-native-toast-notifications';
 import { navigationRef } from './RootNavigation';
 import Routes from './src/routes/Route';
 import { NavigationContainer } from "@react-navigation/native";
+import { SQLiteProvider } from 'expo-sqlite';
 
 
 export const databasename = 'dblocal'
@@ -23,13 +24,20 @@ export default function App() {
 
   return (
     <Provider store={store}>
-    <StatusBar style="auto" />
-    <ToastProvider>
-      <NavigationContainer ref={navigationRef}>
-        <Routes />
-        
-      </NavigationContainer>
-    </ToastProvider>
+      <SQLiteProvider
+          databaseName={databasename}
+         
+          useSuspense
+        >
+           <StatusBar style="auto" />
+            <ToastProvider>
+            <NavigationContainer ref={navigationRef}>
+                <Routes />
+              
+            </NavigationContainer>
+          </ToastProvider>
+        </SQLiteProvider>
+   
     
   </Provider>
   );
