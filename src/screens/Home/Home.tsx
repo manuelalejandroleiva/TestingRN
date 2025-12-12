@@ -1,6 +1,6 @@
 
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { use, useCallback, useEffect, useState } from 'react'
+import React, { use, useCallback, useEffect, useMemo, useState } from 'react'
 import { InfinityScroll } from '@/src/components/InfinityScroll'
 import Cards from '@/src/components/Cards/Cards'
 import LayoutHeader from '@/src/Layout/LayoutHeader'
@@ -16,23 +16,32 @@ import TextInput from '@/src/components/TextInput/TextInput'
 import { CustomButton as Button } from '../../components/Button/Button'
 import { CustomDropdown as Dropdown, DropDownItem } from '@/src/components/DropDown/Dropdown'
 import Cross from '@/src/Icons/Cross'
+import { useAppSelector } from '@/src/store/hooks /hooks'
+import { RootState } from '@/src/store/store'
 
 
 
 const Home = () => {
 
-    const {listAccounts,addbankAccount,deletebankAccount,load,visibleAccount}=useUSer()
+    const {listAccounts,addbankAccount,deletebankAccount,load,visibleAccount,filtrarFecha}=useUSer()
+     const {instance} = useAppSelector((state: RootState) => state.InstanceSlice);
+    
     const [visibility,setVisibility]=useState<boolean>(false)
+    
     const [dataDropDown,setDataDropDown]=useState([
         {label:'Insumos',value:'insumos'},
         {label:'Inversiones',value:'Inversiones'},
         {label:'Gastos',value:'Gastos'},
     ])
-    const dataToShow = visibleAccount.length > 0 
-    ? visibleAccount 
-    : listAccounts;
+
+    const dataToShow = useMemo(() => {
+        return visibleAccount.length > 0 ? visibleAccount : listAccounts;
+      }, [visibleAccount, listAccounts]);
+
+    
   
     const [dateValue, setDateValue] = useState(new Date().toISOString());
+    
     const data={
         fecha:useFieldControl<string>(dateValue, []),
         nombre: useFieldControl<string>("", []),

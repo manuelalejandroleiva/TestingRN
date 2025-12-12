@@ -8,17 +8,24 @@ import { convertToISO, convertToSpanishDate } from "@/lib/Output";
 export const useUSer = () => {
   const [listAccounts, setListAccounts] = useState<any[]>([]);
   const [visibleAccount,setVisibleAccounts]=useState<any[]>([])
+  
   const [load,setLoad]=useState<boolean>(false);
   const [flag, setFlag] = useState<boolean>(false);
   const { showToast } = useAuth();
 
   const addbankAccount = async (data: AccountInterface) => {
     try {
+      if(data.createdAt && data.nombre && data.tipoCuenta){
         setLoad(true)
-      const response = await ListService.PostAccount(data);
-      showToast("Cuenta agregada correctamente", "success");
-      setFlag(!flag);
-      setLoad(false)
+        await ListService.PostAccount(data);
+        showToast("Cuenta agregada correctamente", "success");
+        setFlag(!flag);
+        setLoad(false)
+
+      }else{
+        showToast("Es de obligatorio cumplimiento llenar el formulario","error")
+      }
+      
     } catch (error) {
       console.error("Error posting account:", error);
     }
@@ -61,34 +68,23 @@ export const useUSer = () => {
   };
   
   
+  
   const filtrarFecha = (fechaSeleccionada: Date | string) => {
     if (!fechaSeleccionada) {
-        // Si no hay fecha, mostramos la lista completa
         setVisibleAccounts([...listAccounts]); 
         return;
     }
 
     const selectedDateObj = new Date(fechaSeleccionada);
-    const targetYear = selectedDateObj.getFullYear();
-    const targetMonth = selectedDateObj.getMonth();
-    const targetDay = selectedDateObj.getDate();
+    const fecha_formateada = selectedDateObj.toISOString().split("T")[0];
 
-    // 3. Filtrar sobre la lista ORIGINAL completa
-    const filtered = listAccounts.filter(item => {
-        const itemDate = new Date(item.createdAt);
-
-        // La lógica de comparación es correcta (&&)
-        return (
-            itemDate.getFullYear() === targetYear &&
-            itemDate.getMonth() === targetMonth &&
-            itemDate.getDate() === targetDay
-        );
-    });
-
-    // 4. Actualizar la lista visible
-    setVisibleAccounts(filtered);
+    const filtered = listAccounts.filter(
+        x => x.createdAt.split("T")[0].includes(fecha_formateada)
+    );
+    
+    setVisibleAccounts(filtered);   // 👈 SOLO ESTO
 };
-  
+
   
 
   const fetchAccount = useCallback(async () => {
