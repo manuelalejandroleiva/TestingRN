@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { use, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import { useRoute } from '@react-navigation/native'
 import { InfinityScroll } from '@/src/components/InfinityScroll'
 import LayoutHeader from '@/src/Layout/LayoutHeader'
@@ -22,9 +22,22 @@ const Monedero = () => {
     const params=useRoute()
     const {id}=params.params as {id:string}
     const {handlegoBack}=useGoBack()
+    const[cantidad,setCantidad]=useState<number>(0)
     const {monedero,addMoney,deletebankAccount}=useCoins(+id)
     const [visibility,setVisibility]=useState<boolean>(false)
     const [error,setError]=useState<string>('')
+
+    useEffect(() => {
+    if (monedero && monedero.length > 0) {
+      const total = monedero.reduce((acc, item) => {
+        const cantidadValue = item.cantidad ? item.cantidad.cantidad : item.cantiad?.cantidad ?? 0;
+        return acc + cantidadValue;
+      }, 0);
+      setCantidad(total);
+    } else {
+      setCantidad(0);
+    }
+  }, [monedero]);
 
     const data={
         cantidad: useFieldControl<string>("", [required, isPositive]),
@@ -183,6 +196,11 @@ const Monedero = () => {
           </View>
 
         </Modals>
+        <View
+        style={tw`absolute bottom-5  right-5 w-12 h-12 rounded-full bg-orange-500 justify-center items-center shadow-lg`}
+      >
+        <Text style={tw`text-white font-bold text-lg`}>{cantidad}</Text>
+      </View>
         
               </>
           

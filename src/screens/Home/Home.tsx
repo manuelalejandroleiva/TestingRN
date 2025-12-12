@@ -2,11 +2,6 @@
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { use, useCallback, useEffect, useState } from 'react'
 import { InfinityScroll } from '@/src/components/InfinityScroll'
-import { AuthPayload } from '@/src/interfaces /UserInterface'
-import { useSQLiteContext } from 'expo-sqlite'
-import { drizzle } from 'drizzle-orm/expo-sqlite'
-import *  as schema from '@/db/schema'
-
 import Cards from '@/src/components/Cards/Cards'
 import LayoutHeader from '@/src/Layout/LayoutHeader'
 import { navigates } from '@/RootNavigation'

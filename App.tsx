@@ -3,7 +3,6 @@ import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator';
 import { openDatabaseSync } from 'expo-sqlite';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import migrations from './drizzle/migrations';
 import { Provider } from 'react-redux';
 import { store } from './src/store/store';
 import { ToastProvider } from 'react-native-toast-notifications';
@@ -27,7 +26,7 @@ export default function App() {
         
       </NavigationContainer>
       </ToastProvider>
-  </Provider>
+    </Provider>
   );
 }
 

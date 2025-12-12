@@ -62,7 +62,7 @@ export const useCoins = (id:number) => {
                       // Aquí va la eliminación real
                       try {
                         setLoad(true);
-                        const response = await MonederoService.deletecantiadadMonedero(id);
+                        await MonederoService.deletecantiadadMonedero(id);
                         showToast("Cuenta eliminada correctamente", "success");
                         fetchMonedero()
                       } catch (error) {
