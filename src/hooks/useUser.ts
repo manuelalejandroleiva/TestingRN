@@ -3,9 +3,11 @@ import ListService from "@/src/services/List.service";
 import { AccountInterface } from "../interfaces /AccountInterface";
 import { useAuth } from "./useAuth";
 import { Alert } from "react-native";
+import { convertToISO, convertToSpanishDate } from "@/lib/Output";
 
 export const useUSer = () => {
   const [listAccounts, setListAccounts] = useState<any[]>([]);
+  const [visibleAccount,setVisibleAccounts]=useState<any[]>([])
   const [load,setLoad]=useState<boolean>(false);
   const [flag, setFlag] = useState<boolean>(false);
   const { showToast } = useAuth();
@@ -57,6 +59,37 @@ export const useUSer = () => {
       console.error("Error deleting account:", error);
     }
   };
+  
+  
+  const filtrarFecha = (fechaSeleccionada: Date | string) => {
+    if (!fechaSeleccionada) {
+        // Si no hay fecha, mostramos la lista completa
+        setVisibleAccounts([...listAccounts]); 
+        return;
+    }
+
+    const selectedDateObj = new Date(fechaSeleccionada);
+    const targetYear = selectedDateObj.getFullYear();
+    const targetMonth = selectedDateObj.getMonth();
+    const targetDay = selectedDateObj.getDate();
+
+    // 3. Filtrar sobre la lista ORIGINAL completa
+    const filtered = listAccounts.filter(item => {
+        const itemDate = new Date(item.createdAt);
+
+        // La lógica de comparación es correcta (&&)
+        return (
+            itemDate.getFullYear() === targetYear &&
+            itemDate.getMonth() === targetMonth &&
+            itemDate.getDate() === targetDay
+        );
+    });
+
+    // 4. Actualizar la lista visible
+    setVisibleAccounts(filtered);
+};
+  
+  
 
   const fetchAccount = useCallback(async () => {
     try {
@@ -77,9 +110,10 @@ export const useUSer = () => {
     listAccounts,
     fetchAccount,
     flag,
+    visibleAccount,
     addbankAccount,
     deletebankAccount,
-    load
+    load,filtrarFecha
   };
 };
 
