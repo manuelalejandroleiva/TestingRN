@@ -33,6 +33,8 @@ Aplicación móvil desarrollada en **React Native** para la gestión de un moned
 1. Clonar el repositorio:
 2. te creas un archivo .env
 3. le colocas esta variable de entorno API_URL_LOGIN=https://693ac0f59b80ba7262cb3b02.mockapi.io/Testing
+4. usuario: admin
+5. password:admin
 
 ```bash
 git clone https://github.com/tu-usuario/monedero-app.git
