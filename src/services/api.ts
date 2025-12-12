@@ -23,6 +23,28 @@ class ApiService {
         
       },
     });
+
+    //Interceptor to handle responses globally and if 401 redirect to login
+    this.api.interceptors.response.use(
+        (res) => {
+          return res;
+        },
+        async (err) => {
+          const originalConfig = err.config;
+          if (err.response) {          
+            if (err.response.status == 401 && !originalConfig._retry) {
+              originalConfig._retry = true;
+              
+              navigates('Login');
+  
+            }
+  
+          }
+  
+          return Promise.reject(err);
+        }
+      );
+  
     
   }
 

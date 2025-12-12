@@ -3,13 +3,15 @@ import { AuthPayload } from "../interfaces /UserInterface";
 import { drizzle } from "drizzle-orm/expo-sqlite"
 import *  as schema from '@/db/schema'
 import { navigates } from "@/RootNavigation";
+import { useToast } from "react-native-toast-notifications";
+import { colorpallet } from "../components/color/color";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 
 export const useAuth = () => { 
 
-
-    const db = useSQLiteContext()
-    const dri = drizzle(db, { schema })
+    const toast = useToast()
+   
     const handleAuth = async (username: string, password: string) => {
         const authpayload: AuthPayload = {
             email:username,
@@ -26,9 +28,19 @@ export const useAuth = () => {
     
         
     };    
+    const showToast = (msg: string, type: string) => {
+        toast.show(msg, {
+            placement: "bottom",
+            type: type,
+            duration: 3000,
+            successColor: colorpallet.green,
+            //@ts-ignore
+            successIcon: <FontAwesome name="check" size={18} color={"white"} />,
+        });
+    };
     
     
-    return { handleAuth }; 
+    return { handleAuth,showToast }; 
 }
 
 

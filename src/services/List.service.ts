@@ -23,11 +23,19 @@ class ListService {
     } catch (error) {
          //@ts-ignore
          throw new Error(error.message)
-
-        
+    }
+  }
+  async deleteAccount(id:number|string): Promise<AxiosResponse<any>> {
+    try {
+        const response = await ApiService.api.delete(`/accounts/${id}`);
+        return response;
+    } catch (error) {
+         //@ts-ignore
+         throw new Error(error.message)
     }
   }
 }
+
 const singleton = new ListService();
 export default singleton;
 
