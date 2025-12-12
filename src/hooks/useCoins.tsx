@@ -1,11 +1,15 @@
 import { useCallback, useEffect, useState } from "react"
 import MonederoService from '@/src/services/Monedero.service'
 import { MoneyInterface } from "../interfaces /UserInterface";
+import { useAuth } from "./useAuth";
+import { Alert } from "react-native";
 
 export const useCoins = (id:number) => {
 
     const [monedero,setMonedero]=useState<any[]>([])
     const [flag, setFlag] = useState<boolean>(false);
+    const {showToast}=useAuth();
+    const [load,setLoad]=useState<boolean>(false);
 
 
     //Visualizar las monedas en el monedero
@@ -40,12 +44,49 @@ export const useCoins = (id:number) => {
         }
       }
 
+
+      const deletebankAccount = async (id: number | string) => {
+        try {
+            Alert.alert(
+                "Eliminar cuenta",
+                "¿Estás seguro de que deseas eliminar esta cuenta bancaria?",
+                [
+                  {
+                    text: "Cancelar",
+                    style: "cancel",
+                  },
+                  {
+                    text: "Sí, eliminar",
+                    style: "destructive",
+                    onPress: async () => {
+                      // Aquí va la eliminación real
+                      try {
+                        setLoad(true);
+                        const response = await MonederoService.deletecantiadadMonedero(id);
+                        showToast("Cuenta eliminada correctamente", "success");
+                        fetchMonedero()
+                      } catch (error) {
+                        console.error("Error deleting account:", error);
+                        showToast("Error al eliminar la cuenta", "error");
+                      }
+                    },
+                  },
+                ],
+                { cancelable: true }
+              );
+         
+        } catch (error) {
+          console.error("Error deleting account:", error);
+        }
+      };
+
     useEffect(() => {
         fetchMonedero();
     }, [fetchMonedero]);    
     return {
         monedero,
         fetchMonedero,
-        addMoney
+        addMoney,
+        deletebankAccount
     }
 }
